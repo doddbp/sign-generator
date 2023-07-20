@@ -10,7 +10,7 @@ function generateSign() {
 
   // Customize this template as per your requirements
   const signTemplate = `
-    <div class="sign">
+    <div class="sign ${selectedTemplate}">
       <h2>${name}</h2>
       <p>Price: ${price}</p>
       <p>SKU: ${sku}</p>
