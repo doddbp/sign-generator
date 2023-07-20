@@ -1,0 +1,34 @@
+/* Global styles for the sign generator */
+/* Add your global styles here */
+
+/* Template for single 8.5x11 sheet in landscape */
+.single-template {
+  width: 11in;
+  height: 8.5in;
+  /* Add specific styles for the single template */
+}
+
+/* Template for four signs per sheet in landscape */
+.four-per-sheet-template {
+  width: 11in;
+  height: 8.5in;
+  /* Add specific styles for the four-per-sheet template */
+  /* For example, you might want to adjust margins, font sizes, and spacing for the smaller signs */
+}
+
+/* Print styles for single 8.5x11 sheet in landscape */
+@media print and (orientation: landscape) {
+  .single-template {
+    /* Define styles for printing on single 8.5x11 sheet */
+  }
+}
+
+/* Print styles for four signs per sheet in landscape */
+@media print and (orientation: landscape) {
+  .four-per-sheet-template {
+    /* Define styles for printing four signs per sheet */
+  }
+}
+
+/* Additional styles for printing (optional) */
+/* You can define additional print-specific styles here */
