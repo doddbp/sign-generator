@@ -6,7 +6,24 @@
 </head>
 <body>
     <div class="container">
-        <!-- Add form inputs and template selection here -->
+        <form>
+            <!-- Default input boxes for the first item -->
+            <div class="item">
+                <label for="name">Name:</label>
+                <input type="text" name="name" placeholder="Enter name...">
+                <label for="price">Price:</label>
+                <input type="number" name="price" step="0.01" placeholder="Enter price...">
+                <label for="sku">SKU:</label>
+                <textarea name="sku" rows="4" placeholder="Enter SKU..."></textarea>
+            </div>
+
+            <!-- A button to add additional items -->
+            <button type="button" onclick="addNewItem()">Add New Item</button>
+
+            <!-- A button to generate the sign -->
+            <button type="button" onclick="generateSign()">Generate Sign</button>
+        </form>
+
         <div class="sign-preview" id="preview"></div>
         <button onclick="printSign()">Print Sign</button>
     </div>
