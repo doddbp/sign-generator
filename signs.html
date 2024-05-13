@@ -68,14 +68,14 @@
             const sku = item.querySelector('.sku').value;
 
             // Adding the logo
-            doc.addImage(imgData, 'PNG', 0.8, 0.8, 2, 0.3); // Position and size of the logo
+            doc.addImage(imgData, 'PNG', 8.2, 7.8, 2, 0.3); // Position and size of the logo
 
-            doc.setFontSize(72);
+            doc.setFontSize(96);
             doc.text(price, 5.5, 4, { align: 'center' });
             doc.setFontSize(48);
-            doc.text(itemName, 5.5, 4.8, { align: 'center' });
+            doc.text(itemName, 5.5, 5, { align: 'center' });
             doc.setFontSize(22);
-            doc.text(description, 5.5, 5.2, { align: 'center' });
+            doc.text(description, 5.5, 5.3, { align: 'center' });
             doc.setFontSize(12);
             doc.text(sku, 0.8, 7.2); // SKU at the bottom left corner
 
