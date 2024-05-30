@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    label, input, button, select { display: block; margin-top: 10px; }
+    input, button, select { width: 200px; }
+    .form-section { margin-bottom: 20px; }
+</style>
+</head>
+<body>
+    <div id="itemsContainer">
+        <div class="item-input">
+            <label>Item Name:</label>
+            <input type="text" class="itemName" required>
+            <label>Price:</label>
+            <input type="text" class="price" required>
+            <label>Description:</label>
+            <input type="text" class="description" required>
+            <label>SKU:</label>
+            <input type="text" class="sku" required>
+        </div>
+    </div>
+    <label>Layout Selection:</label>
+    <select id="layoutSelect">
+        <option value="full">Full Size</option>
+        <option value="quarter">Four Signs Per Page</option>
+    </select>
+    <button onclick="addItem()">Add Another Item</button>
+    <button onclick="generatePDF()">Generate PDF</button>
+
+<script>
+    function addItem() {
+        const container = document.getElementById('itemsContainer');
+        const newItemInput = container.firstElementChild.cloneNode(true);
+        newItemInput.querySelectorAll('input').forEach(input => input.value = '');
+        container.appendChild(newItemInput);
+    }
+
+    function generatePDF() {
+        const layout = document.getElementById('layoutSelect').value;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'in',
+            format: [11, 8.5]
+        });
+
+        document.querySelectorAll('.item-input').forEach((item, index) => {
+            if (layout === 'quarter' && index % 4 !== 0) return; // Skip adding new page for every sign if quarter layout
+            if (index > 0) doc.addPage();
+
+            const itemName = item.querySelector('.itemName').value;
+            const price = item.querySelector('.price').value;
+            const description = item.querySelector('.description').value;
+            const sku = item.querySelector('.sku').value;
+            const baseX = layout === 'quarter' ? (index % 4 % 2) * 5.5 : 0.5;
+            const baseY = layout === 'quarter' ? Math.floor(index % 4 / 2) * 4.25 : 0.5;
+            const text = `Item: ${itemName}\nPrice: ${price}\nDescription: ${description}\nSKU: ${sku}`;
+
+            doc.setFontSize(layout === 'quarter' ? 10 : 22);
+            doc.text(text, baseX + 1, baseY + 1, { maxWidth: 5 }); // Adjust max width for quarter layout
+        });
+
+        doc.save('signage.pdf');
+    }
+</script>
+</body>
+</html>

@@ -68,7 +68,7 @@
             const sku = item.querySelector('.sku').value;
 
             // Adding the logo
-            doc.addImage(imgData, 'PNG', 8.2, 7, 2, 0.4); // Position and size of the logo
+            doc.addImage(imgData, 'PNG', 8.2, 7, 2, 0.4); // logo at bottom right corner
 
             doc.setFontSize(96);
             doc.text(price, 5.5, 4, { align: 'center' });
@@ -80,9 +80,9 @@
             doc.text(sku, 0.8, 7.2); // SKU at the bottom left corner
 
             // Draw a red border
-            doc.setDrawColor(221, 30, 54); // Red border
+            doc.setDrawColor(221, 30, 54);
             doc.setLineWidth(0.1);
-            doc.rect(0.5, 0.5, 10, 7, 'S'); // border with rounded corners 
+            doc.rect(0.5, 0.5, 10, 7, 'S');
         });
 
         doc.save('signage.pdf');
