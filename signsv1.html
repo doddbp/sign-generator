@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Sign Generator</title>
-    <link rel="stylesheet" href="font.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="fonts.css">
+    <script type="module">
+        import { base64Font } from './fontData.js';
+        import { jsPDF } from 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
+
+        window.base64Font = base64Font;
+        window.jsPDF = jsPDF;
+    </script>
     <style>
         body { font-family: 'Marsden', Arial, sans-serif; padding: 20px; }
         label, input, button { display: block; margin-top: 10px; }
@@ -63,14 +69,16 @@
         }
 
         async function generatePDF() {
-            const { jsPDF } = window.jspdf;
+            const { jsPDF } = window;
+            const base64Font = window.base64Font;
             const doc = new jsPDF({
                 orientation: 'landscape',
                 unit: 'in',
                 format: [11, 8.5]
             });
 
-            doc.addFont('Marsden', 'Marsden', 'normal');
+            doc.addFileToVFS('Marsden.ttf', base64Font);
+            doc.addFont('Marsden.ttf', 'Marsden', 'normal');
             doc.setFont('Marsden');
 
             const logoUrl = 'img/EverGRO logo cropped.png'; // logo's URL
