@@ -7,142 +7,8 @@
         import { base64Font } from './fontData.js';
         import { jsPDF } from 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js';
 
-        window.addEventListener('DOMContentLoaded', () => {
-            window.generatePDF = async function() {
-                const doc = new jsPDF({
-                    orientation: 'landscape',
-                    unit: 'in',
-                    format: [11, 8.5]
-                });
-
-                doc.addFont(base64Font, 'Marsden', 'normal');
-                doc.setFont('Marsden');
-
-                const logoUrl = 'img/EverGRO logo cropped.png'; // logo's URL
-                const imgData = await fetch(logoUrl)
-                    .then(res => res.blob())
-                    .then(blob => new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
-                        reader.onerror = reject;
-                        reader.readAsDataURL(blob);
-                    }));
-
-                const bannerSelect = document.getElementById('bannerSelect').value;
-                let bannerUrl = '';
-
-                switch (bannerSelect) {
-                    case 'none':
-                        bannerUrl = '';
-                        break;
-                    case 'bestseller':
-                        bannerUrl = 'img/bestseller.png';
-                        break;
-                    case 'newitem':
-                        bannerUrl = 'img/newitem.png';
-                        break;
-                    case 'saleitem':
-                        bannerUrl = 'img/saleitem.png';
-                        break;
-                    case 'lowpriceitem':
-                        bannerUrl = 'img/lowpriceitem.png';
-                        break;
-                    case 'qualityitem':
-                        bannerUrl = 'img/qualityitem.png';
-                        break;
-                    case 'cow':
-                        bannerUrl = 'img/cow.png';
-                        break;
-                    case 'chicken':
-                        bannerUrl = 'img/chicken.png';
-                        break;
-                    case 'goat':
-                        bannerUrl = 'img/goat.png';
-                        break;
-                    case 'pig':
-                        bannerUrl = 'img/pig.png';
-                        break;
-                    case 'sheep':
-                        bannerUrl = 'img/sheep.png';
-                        break;
-                    case 'horse':
-                        bannerUrl = 'img/horse.png';
-                        break;
-                    case 'rabbit':
-                        bannerUrl = 'img/rabbit.png';
-                        break;
-                    case 'wildbird':
-                        bannerUrl = 'img/wildbird.png';
-                        break;
-                    case 'dog':
-                        bannerUrl = 'img/dog.png';
-                        break;
-                    case 'cat':
-                        bannerUrl = 'img/cat.png';
-                        break;
-                    case 'fish':
-                        bannerUrl = 'img/fish.png';
-                        break;
-                    default:
-                        bannerUrl = '';
-                        break;
-                }
-
-                const bannerData = await fetch(bannerUrl)
-                    .then(res => res.blob())
-                    .then(blob => new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
-                        reader.onerror = reject;
-                        reader.readAsDataURL(blob);
-                    }));
-
-                const template = document.getElementById('templateSelect').value;
-
-                document.querySelectorAll('.item-input').forEach((item, index) => {
-                    if (index > 0) doc.addPage();
-                    const price = item.querySelector('.price').value;
-                    const itemName = item.querySelector('.itemName').value;
-                    const description = item.querySelector('.description').value;
-                    const sku = item.querySelector('.sku').value;
-
-                    // Adding the logo
-                    doc.addImage(imgData, 'PNG', 8.2, 7, 2, 0.4); // logo at bottom right corner
-
-                    // Adding the banner
-                    if (bannerUrl) {
-                        doc.addImage(bannerData, 'PNG', 0.5, 0.5, 1.5, 1.5); // banner at the top
-                    }
-
-                    if (template === 'full') {
-                        doc.setFontSize(96);
-                        doc.text(price, 5.5, 4, { align: 'center' });
-                        doc.setFontSize(48);
-                        doc.text(itemName, 5.5, 4.8, { align: 'center' });
-                        doc.setFontSize(22);
-                        doc.text(description, 5.5, 5.2, { align: 'center' });
-                        doc.setFontSize(12);
-                        doc.text(sku, 0.8, 7.2);
-                    } else if (template === 'quarter') {
-                        doc.setFontSize(110);
-                        doc.text(price, 5.5, 4, { align: 'center' });
-                        doc.setFontSize(48);
-                        doc.text(itemName, 5.5, 4.8, { align: 'center' });
-                        doc.setFontSize(30);
-                        doc.text(description, 5.5, 5.2, { align: 'center' });
-                        doc.setFontSize(16);
-                        doc.text(sku, 0.8, 7.2); // SKU at the bottom left corner
-                    }
-
-                    // Draw a red border
-                    doc.setDrawColor(221, 30, 54);
-                    doc.setLineWidth(0.1);
-                    doc.rect(0.5, 0.5, 10, 7, 'S');
-                });
-
-                doc.save('signage.pdf');
-            }
-        });
+        window.base64Font = base64Font;
+        window.jsPDF = jsPDF;
     </script>
     <style>
         body { font-family: Arial, sans-serif; padding: 20px; }
@@ -199,6 +65,143 @@
             const newItemInput = container.firstElementChild.cloneNode(true);
             newItemInput.querySelectorAll('input').forEach(input => input.value = '');
             container.appendChild(newItemInput);
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window;
+            const base64Font = window.base64Font;
+            const doc = new jsPDF({
+                orientation: 'landscape',
+                unit: 'in',
+                format: [11, 8.5]
+            });
+
+            doc.addFont(base64Font, 'Marsden', 'normal');
+            doc.setFont('Marsden');
+
+            const logoUrl = 'img/EverGRO logo cropped.png'; // logo's URL
+            const imgData = await fetch(logoUrl)
+                .then(res => res.blob())
+                .then(blob => new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                }));
+
+            const bannerSelect = document.getElementById('bannerSelect').value;
+            let bannerUrl = '';
+
+            switch (bannerSelect) {
+                case 'none':
+                    bannerUrl = '';
+                    break;
+                case 'bestseller':
+                    bannerUrl = 'img/bestseller.png';
+                    break;
+                case 'newitem':
+                    bannerUrl = 'img/newitem.png';
+                    break;
+                case 'saleitem':
+                    bannerUrl = 'img/saleitem.png';
+                    break;
+                case 'lowpriceitem':
+                    bannerUrl = 'img/lowpriceitem.png';
+                    break;
+                case 'qualityitem':
+                    bannerUrl = 'img/qualityitem.png';
+                    break;
+                case 'cow':
+                    bannerUrl = 'img/cow.png';
+                    break;
+                case 'chicken':
+                    bannerUrl = 'img/chicken.png';
+                    break;
+                case 'goat':
+                    bannerUrl = 'img/goat.png';
+                    break;
+                case 'pig':
+                    bannerUrl = 'img/pig.png';
+                    break;
+                case 'sheep':
+                    bannerUrl = 'img/sheep.png';
+                    break;
+                case 'horse':
+                    bannerUrl = 'img/horse.png';
+                    break;
+                case 'rabbit':
+                    bannerUrl = 'img/rabbit.png';
+                    break;
+                case 'wildbird':
+                    bannerUrl = 'img/wildbird.png';
+                    break;
+                case 'dog':
+                    bannerUrl = 'img/dog.png';
+                    break;
+                case 'cat':
+                    bannerUrl = 'img/cat.png';
+                    break;
+                case 'fish':
+                    bannerUrl = 'img/fish.png';
+                    break;
+                default:
+                    bannerUrl = '';
+                    break;
+            }
+
+            const bannerData = await fetch(bannerUrl)
+                .then(res => res.blob())
+                .then(blob => new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                }));
+
+            const template = document.getElementById('templateSelect').value;
+
+            document.querySelectorAll('.item-input').forEach((item, index) => {
+                if (index > 0) doc.addPage();
+                const price = item.querySelector('.price').value;
+                const itemName = item.querySelector('.itemName').value;
+                const description = item.querySelector('.description').value;
+                const sku = item.querySelector('.sku').value;
+
+                // Adding the logo
+                doc.addImage(imgData, 'PNG', 8.2, 7, 2, 0.4); // logo at bottom right corner
+
+                // Adding the banner
+                if (bannerUrl) {
+                    doc.addImage(bannerData, 'PNG', 0.5, 0.5, 1.5, 1.5); // banner at the top
+                }
+
+                if (template === 'full') {
+                    doc.setFontSize(96);
+                    doc.text(price, 5.5, 4, { align: 'center' });
+                    doc.setFontSize(48);
+                    doc.text(itemName, 5.5, 4.8, { align: 'center' });
+                    doc.setFontSize(22);
+                    doc.text(description, 5.5, 5.2, { align: 'center' });
+                    doc.setFontSize(12);
+                    doc.text(sku, 0.8, 7.2);
+                } else if (template === 'quarter') {
+                    doc.setFontSize(110);
+                    doc.text(price, 5.5, 4, { align: 'center' });
+                    doc.setFontSize(48);
+                    doc.text(itemName, 5.5, 4.8, { align: 'center' });
+                    doc.setFontSize(30);
+                    doc.text(description, 5.5, 5.2, { align: 'center' });
+                    doc.setFontSize(16);
+                    doc.text(sku, 0.8, 7.2); // SKU at the bottom left corner
+                }
+
+                // Draw a red border
+                doc.setDrawColor(221, 30, 54);
+                doc.setLineWidth(0.1);
+                doc.rect(0.5, 0.5, 10, 7, 'S');
+            });
+
+            doc.save('signage.pdf');
         }
     </script>
 </body>
