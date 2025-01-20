@@ -23,8 +23,8 @@
             <input type="text" class="description" required>
             <label>SKU:</label>
             <input type="text" class="sku" required>
-            <label for="bannerSelect">Add Graphic?</label>
-            <select id="bannerSelect">
+            <label for="bannerSelect">Add Graphic:</label>
+            <select class="bannerSelect">
                 <option value="none">None</option>
                 <option value="bestseller">Best Seller</option>
                 <option value="newitem">New Item</option>
@@ -42,11 +42,6 @@
                 <option value="dog">Dog</option>
                 <option value="cat">Cat</option>
                 <option value="fish">Fish</option>
-            </select>
-            <label for="templateSelect">Select Template:</label>
-            <select id="templateSelect">
-                <option value="full">Large Signs</option>
-                <option value="quarter">Small Signs</option>
             </select>
         </div>
     </div>
@@ -83,7 +78,7 @@
                 reader.readAsDataURL(blob);
             }));
 
-        const bannerSelect = document.getElementById('bannerSelect').value;
+        const bannerSelect = item.querySelector('.bannerSelect').value;
         let bannerUrl = '';
 
     switch (bannerSelect) {
@@ -152,7 +147,7 @@
 
         const template = document.getElementById('templateSelect').value;
 
-        document.querySelectorAll('.item-input').forEach((item, index) => {
+        document.querySelectorAll('.item-input').forEach(async (item, index) => {
             if (index > 0) doc.addPage();
             const price = item.querySelector('.price').value;
             const itemName = item.querySelector('.itemName').value;
